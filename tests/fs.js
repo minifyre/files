@@ -37,6 +37,19 @@ tests=
 			setup:()=>file.writeFile('tmp/write.txt','test text')
 		}
 	]
+	// @todo lib.copyDir (copy tmp into itself)
+	// lib.copyFile
+	// lib.info (on dir and a file)'
+
+	// lib.isDir
+	// lib.moveDir
+	// lib.moveFile
+	// lib.renameFile
+	// lib.renameDir
+
+	// lib.writeDirs tmp/a/b/c/
+	// copy,delete,move,read,rename (on both dir & file, or update prev tests to use these methods instead)
+
 ],
 opts={now:()=>performance.now(),parallel:false}
 
