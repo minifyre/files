@@ -17,9 +17,9 @@ asyncMap=function(arr,fn)
 		Promise.resolve([])
 	)
 },
-mapPath=(arr,src)=>arr.map(x=>joinPath(src,x))
+mapPath=(arr,src)=>arr.map(x=>joinPath(src,x)),
 setup=fn=>curry(wait,fn),
-service=Object.entries(
+lib=Object.entries(
 {
 	deleteFile:fs.unlink,
 
@@ -32,22 +32,22 @@ service=Object.entries(
 .map(([name,fn])=>[name,setup(fn)])
 .reduce((obj,[name,fn])=>Object.assign(obj,{[name]:fn}),{})
 
-export default service
+export default lib
 
 
-service.copyDir=function(src,dest)
+lib.copyDir=function(src,dest)
 {
 	const name=url2name(src)
 	dest=joinPath(dest,name)
 
-	return service.writeDir(joinPath(dest,name))
-	.then(()=>service.readDir(src))
-	.then(arr=>asyncMap(mapPath(arr,src),x=>service.copy(x,dest)))
+	return lib.writeDir(joinPath(dest,name))
+	.then(()=>lib.readDir(src))
+	.then(arr=>asyncMap(mapPath(arr,src),x=>lib.copy(x,dest)))
 }
 //modified times are different than native copy
-service.copyFile=function(src,dir)
+lib.copyFile=function(src,dest)
 {
-	const dest=joinPath(dir,url2name(src))
+	dest=joinPath(dest,url2name(src))//@todo make this standalone
 
 	return new Promise(function(res,rej)
 	{
@@ -60,47 +60,47 @@ service.copyFile=function(src,dir)
 		rd.pipe(wr)
 	})
 }
-service.deleteDir=function(src)
+lib.deleteDir=function(src)
 {
-	return service.readDir(src)
-	.then(arr=>asyncMap(mapPath(arr,src),x=>service.delete(x)))
+	return lib.readDir(src)
+	.then(arr=>asyncMap(mapPath(arr,src),x=>lib.delete(x)))
 	.then(()=>wait(fs.rmdir,src))
 }
-service.info=async function(src)
+lib.info=async function(src)
 {//@todo +catch()
 	const {atime:accessed,birthtime:created,mtime:modified,ctime:changed,mode,size}=await wait(fs.lstat,src)
 
 	return {accessed,changed,created,mode,modified,size,isDir:stats.isDirectory()}
 }
-service.isDir=(...args)=>wait(fs.lstat,...args).then(stats=>stats.isDirectory())
-service.moveDir=function(src,dest)
+lib.isDir=(...args)=>wait(fs.lstat,...args).then(stats=>stats.isDirectory())
+lib.moveDir=function(src,dest)//@todo merge with copyDir
 {
 	const name=url2name(src)
 	dest=joinPath(dest,name)
 
-	return service.writeDir(joinPath(dest,name))
-	.then(()=>service.readDir(src))
-	.then(arr=>asyncMap(mapPath(arr,src),x=>service.move(x,dest)))
-	.then(()=>service.deleteDir(src))
+	return lib.writeDir(joinPath(dest,name))
+	.then(()=>lib.readDir(src))
+	.then(arr=>asyncMap(mapPath(arr,src),x=>lib.move(x,dest)))
+	.then(()=>lib.deleteDir(src))
 }
-service.moveFile=(src,dir)=>wait(fs.rename,src,joinPath(dir,url2name(src)))
-service.renameFile=(src,name)=>wait(fs.rename,src,joinPath(url2dirs(src),name))
-service.renameDir=function(src,name)
+lib.moveFile=(src,dest)=>wait(fs.rename,src,joinPath(dest,url2name(src)))
+lib.renameFile=(src,name)=>wait(fs.rename,src,joinPath(url2dirs(src),name))
+lib.renameDir=function(src,name)//@todo merge with moveDir
 {
 	let dest=joinPath(url2dirs(src),name)
 
-	return service.writeDir(dest)
-	.then(()=>service.readDir(src))
-	.then(arr=>asyncMap(mapPath(arr,src),item=>service.move(item,dest)))
-	.then(()=>service.deleteDir(src))
+	return lib.writeDir(dest)
+	.then(()=>lib.readDir(src))
+	.then(arr=>asyncMap(mapPath(arr,src),item=>lib.move(item,dest)))
+	.then(()=>lib.deleteDir(src))
 }
-service.writeDirs=function(src)//@todo need to make sure this works
+lib.writeDirs=function(src)//@todo need to make sure this works
 {
 	return wait(fs.lstat,src)
 	.catch(function(err)
 	{
 		return err.code==='ENOENT'?
-		service.writeDirs(url2dirs(src)).then(()=>writeDir(src)):
+		lib.writeDirs(url2dirs(src)).then(()=>writeDir(src)):
 		Promise.reject(err)
 	})
 }
@@ -108,9 +108,9 @@ service.writeDirs=function(src)//@todo need to make sure this works
 .split(',')
 .forEach(function(fn)
 {
-	service[fn]=function(src,...args)
+	lib[fn]=function(src,...args)
 	{
-		return service.isDir(src)
-		.then(isDir=>service[fn+(isDir?'Dir':'File')](src,...args))
+		return lib.isDir(src)
+		.then(isDir=>lib[fn+(isDir?'Dir':'File')](src,...args))
 	}
 })
