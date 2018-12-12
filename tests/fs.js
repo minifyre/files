@@ -24,9 +24,17 @@ tests=
 	[
 		curry(file.deleteDir,'tmp/a/'),
 		()=>file.readDir('tmp').then(val=>run.config.assert(val,dirTmp)),
-		{//@todo add a backup delete on cleanup?
-			name:'deleteFile',
+		{
+			name:'deleteDir',
 			setup:()=>file.writeDir('tmp/a')
+		}
+	],
+	[
+		curry(file.deleteFile,'tmp/write.txt'),
+		()=>file.readDir('tmp').then(val=>run.config.assert(val,dirTmp)),
+		{
+			name:'deleteFile',
+			setup:()=>file.writeFile('tmp/write.txt','test text')
 		}
 	]
 ],
