@@ -4,6 +4,7 @@ import run from '../../cherub/index.js'
 
 const
 dirTmp=['read.txt'],
+readTxt='some text',
 mkOpts=function()
 {
 	return {
@@ -16,7 +17,9 @@ mkOpts=function()
 tests=
 [
 	[()=>file.readDir('tmp'),dirTmp,'readDir'],
+	[()=>file.readFile('tmp/read.txt'),readTxt,'readFile']
 ],
-opts={now:()=>performance.now(),parallel:false}
+//@todo re-enable shuffle
+opts={now:()=>performance.now(),parallel:false,shuffle:false}
 
 run(tests,opts)
