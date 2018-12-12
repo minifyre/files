@@ -14,7 +14,12 @@ tests=
 	[
 		()=>file.writeDir('tmp/a'),
 		()=>emptyDir('tmp/a/'),
-		{name:'writeDir',cleanup:curry(file.deleteDir,'tmp/a/')}
+		{name:'writeDir',cleanup:curry(file.delete,'tmp/a/')}
+	],
+	[
+		()=>file.writeFile('tmp/write.txt','test text'),
+		()=>file.readFile('tmp/write.txt').then(txt=>txt==='test text'),
+		{name:'writeFile',cleanup:curry(file.delete,'tmp/write.txt')}
 	]
 ],
 //@todo re-enable shuffle
