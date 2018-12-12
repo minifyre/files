@@ -3,7 +3,7 @@ import {performance} from 'perf_hooks'
 import run from '../../cherub/index.js'
 
 const
-tmpContents=['read.txt'],
+dirTmp=['read.txt'],
 mkOpts=function()
 {
 	return {
@@ -15,7 +15,7 @@ mkOpts=function()
 },
 tests=
 [
-	[()=>file.readDir('tmp'),tmpContents,'readDir']
+	[()=>file.readDir('tmp'),dirTmp,'readDir'],
 ],
 opts={now:()=>performance.now(),parallel:false}
 
