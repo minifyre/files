@@ -1,8 +1,7 @@
 import fs from 'fs'
-import silo from './node_modules/slio/index.js'
 
 const
-{curry}=silo.util,
+curry=(fn,...xs)=>(...ys)=>fn(...xs,...ys),
 joinPath=(path,filename)=>path+(!path.match(/\/$/)?'/':'')+filename,
 url2dirs=url=>url.replace(/(\/|\\)$/,'').split(/\/|\\/),
 url2name=url=>url2dirs(url).slice(-1)[0],
