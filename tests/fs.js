@@ -20,9 +20,16 @@ tests=
 		()=>file.writeFile('tmp/write.txt','test text'),
 		()=>file.readFile('tmp/write.txt').then(txt=>txt==='test text'),
 		{name:'writeFile',cleanup:curry(file.delete,'tmp/write.txt')}
+	],
+	[
+		curry(file.deleteDir,'tmp/a/'),
+		()=>file.readDir('tmp').then(val=>run.config.assert(val,dirTmp)),
+		{//@todo add a backup delete on cleanup?
+			name:'deleteFile',
+			setup:()=>file.writeDir('tmp/a')
+		}
 	]
 ],
-//@todo re-enable shuffle
-opts={now:()=>performance.now(),parallel:false,shuffle:false}
+opts={now:()=>performance.now(),parallel:false}
 
 run(tests,opts)
