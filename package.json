@@ -1,0 +1,13 @@
+{
+	"name": "Files",
+	"description": "A universal filesystem API (e.g. local files, Google Drive, Dropbox, etc.)",
+	"homepage": "https://github.com/minifyre/files",
+	"license": "MIT",
+	"version": "0.5.0",
+	"dependencies": {
+		"truth": "minifyre/silo"
+	},
+	"devDependencies": {
+		"cherub": "minifyre/cherub"
+	}
+}
