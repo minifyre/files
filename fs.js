@@ -24,7 +24,6 @@ lib=Object.entries(
 	deleteFile:fs.unlink,
 
 	readDir:fs.readdir,//src,{encoding,withFileTypes}
-	readFile:fs.readFile,//src,{encoding}
 
 	writeDir:fs.mkdir,//src
 	writeFile:fs.writeFile//src,data,{encoding}
@@ -34,6 +33,7 @@ lib=Object.entries(
 
 export default lib
 
+lib.readFile=(src,encoding='utf8',...args)=>wait(fs.readFile,src,encoding,...args)
 
 lib.copyDir=function(src,dest)
 {
