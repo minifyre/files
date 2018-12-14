@@ -36,12 +36,21 @@ tests=
 			name:'deleteFile',
 			setup:()=>file.writeFile('tmp/write.txt','test text')
 		}
-	]
+	],
+	[
+		curry(file.isDir,'tmp'),
+		true,
+		'folder isDir=true'
+	],
+	[
+		curry(file.isDir,'tmp/read.txt'),
+		false,
+		'file isDir=false'
+	],
 	// @todo lib.copyDir (copy tmp into itself)
 	// lib.copyFile
 	// lib.info (on dir and a file)'
 
-	// lib.isDir
 	// lib.moveDir
 	// lib.moveFile
 	// lib.renameFile
