@@ -96,12 +96,17 @@ lib.renameDir=function(src,name)//@todo merge with moveDir
 }
 lib.writeDirs=function(src)//@todo need to make sure this works
 {
-	return wait(fs.lstat,src)
-	.catch(function(err)
+	return asyncMap(url2dirs(src),async function(dir,i,arr)
 	{
-		return err.code==='ENOENT'?
-		lib.writeDirs(url2dirs(src)).then(()=>writeDir(src)):
-		Promise.reject(err)
+		const
+		prefix=arr.slice(0,i),
+		path=prefix.concat([dir]).join('/'),
+		exists=await wait(fs.lstat,path).then(()=>true).catch(()=>false)
+
+		if(!exists) await lib.writeDir(path)
+		else if(await lib.isDir(path)) throw new Error(path+' exists, but is a file')
+
+		return dir
 	})
 }
 ;'copy,delete,move,read,rename'
