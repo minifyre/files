@@ -3,7 +3,7 @@ import fs from 'fs'
 const
 curry=(fn,...xs)=>(...ys)=>fn(...xs,...ys),
 joinPath=(path,filename)=>path+(!path.match(/\/$/)?'/':'')+filename,
-url2dirs=url=>url.replace(/(\/|\\)$/,'').split(/\/|\\/),
+url2dirs=url=>url.split(/\/|\\/).filter(txt=>!!txt.length),
 url2name=url=>url2dirs(url).slice(-1)[0],
 wait=function(fn,...args)
 {
