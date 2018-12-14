@@ -47,6 +47,14 @@ tests=
 		false,
 		'file isDir=false'
 	],
+	[
+		curry(file.writeDirs,'tmp/a/b/c'),
+		()=>file.isDir('tmp/a/b/c/'),
+		{
+			name:'writeDirs',
+			cleanup:curry(file.deleteDir,'tmp/a/')
+		}
+	]
 	// @todo lib.copyDir (copy tmp into itself)
 	// lib.copyFile
 	// lib.info (on dir and a file)'
@@ -61,5 +69,6 @@ tests=
 
 ],
 opts={now:()=>performance.now(),parallel:false}
+
 
 run(tests,opts)
