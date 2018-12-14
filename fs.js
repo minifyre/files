@@ -104,7 +104,7 @@ lib.writeDirs=function(src)//@todo need to make sure this works
 		exists=await wait(fs.lstat,path).then(()=>true).catch(()=>false)
 
 		if(!exists) await lib.writeDir(path)
-		else if(await lib.isDir(path)) throw new Error(path+' exists, but is a file')
+		else if(await lib.isDir(path).then(bool=>!bool)) throw new Error(path+' exists, but is a file')
 
 		return dir
 	})
