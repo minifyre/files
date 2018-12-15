@@ -76,10 +76,9 @@ lib.info=async function(src)
 lib.isDir=(...args)=>wait(fs.lstat,...args).then(stats=>stats.isDirectory())
 lib.moveDir=function(src,dest)//@todo merge with copyDir
 {
-	const name=url2name(src)
-	dest=joinPath(dest,name)
+	dest=joinPath(dest,url2name(src))
 
-	return lib.writeDir(joinPath(dest,name))
+	return lib.writeDir(dest)
 	.then(()=>lib.readDir(src))
 	.then(arr=>asyncMap(mapPath(arr,src),x=>lib.move(x,dest)))
 	.then(()=>lib.deleteDir(src))
