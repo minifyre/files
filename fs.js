@@ -37,11 +37,10 @@ export default lib
 lib.readFile=(src,encoding='utf8',...args)=>wait(fs.readFile,src,encoding,...args)
 
 lib.copyDir=function(src,dest)
-{
-	const name=url2name(src)
-	dest=joinPath(dest,name)
+{//@todo + check to make sure folder is not coied inside itself as that would cause an infinite loop
+	dest=joinPath(dest,url2name(src))
 
-	return lib.writeDir(joinPath(dest,name))
+	return lib.writeDir(dest)
 	.then(()=>lib.readDir(src))
 	.then(arr=>asyncMap(mapPath(arr,src),x=>lib.copy(x,dest)))
 }
