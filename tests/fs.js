@@ -54,14 +54,22 @@ tests=
 			name:'writeDirs',
 			cleanup:curry(file.deleteDir,'tmp/a/')
 		}
+	],
+	[
+		curry(file.rename,'tmp/read.txt','copy.txt'),
+		()=>file.read('tmp/copy.txt').then(txt=>txt===readTxt),
+		{
+			name:'renameFile',
+			cleanup:curry(file.rename,'tmp/copy.txt','read.txt')
+		}
 	]
+
 	// @todo lib.copyDir (copy tmp into itself)
 	// lib.copyFile
 	// lib.info (on dir and a file)'
 
 	// lib.moveDir
 	// lib.moveFile
-	// lib.renameFile
 	// lib.renameDir
 
 	//these are used with move functions...
