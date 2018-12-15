@@ -5,6 +5,7 @@ import run from '../../cherub/index.js'
 const
 dirTmp=['read.txt'],
 readTxt='some text',
+cleanup=()=>file.delete('tmp'),
 setup=()=>file.writeDir('tmp').then(()=>file.writeFile('tmp/read.txt',readTxt)),
 emptyDir=src=>file.readDir(src).then(x=>Array.isArray(x)&&!x.length),
 curry=(fn,...xs)=>(...ys)=>fn(...xs,...ys),
@@ -108,6 +109,5 @@ opts={now:()=>performance.now(),parallel:false}
 setup()
 .then(()=>run(tests,opts))
 
-//cleanup
-.then(()=>file.delete('tmp'))
-.catch(()=>console.log('something went wrong, investigate tmp/ for specifics'))
+.then(cleanup)
+.catch(console.error)
