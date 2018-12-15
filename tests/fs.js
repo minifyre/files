@@ -90,5 +90,20 @@ tests=
 
 ],
 opts={now:()=>performance.now(),parallel:false}
+//setup
+Promise.resolve()
+.then(()=>file.writeDir('tmp'))
+.finally(()=>file.writeFile('tmp/read.txt',readTxt))
 
-run(tests,opts)
+.then(()=>run(tests,opts))
+//rename
+// .then(function()
+// {
+// 	return file.rename('tmp','tmpNew')
+// 	////.then(()=>file.isDir('tmpNew'))
+// 	//.then(console.log)
+// })
+
+//cleanup
+.then(()=>file.delete('tmp'))
+.catch(()=>console.log('something went wrong, investigate tmp/ for specifics'))
