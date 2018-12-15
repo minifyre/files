@@ -4,6 +4,7 @@ const
 curry=(fn,...xs)=>(...ys)=>fn(...xs,...ys),
 joinPath=(path,filename)=>path+(!path.match(/\/$/)?'/':'')+filename,
 url2path=url=>url.split(/\/|\\/).filter(txt=>!!txt.length),
+url2dirs=url=>url2path(url).slice(0,-1),
 url2name=url=>url2path(url).slice(-1)[0],
 wait=function(fn,...args)
 {
@@ -84,7 +85,7 @@ lib.moveDir=function(src,dest)//@todo merge with copyDir
 	.then(()=>lib.deleteDir(src))
 }
 lib.moveFile=(src,dest)=>wait(fs.rename,src,joinPath(dest,url2name(src)))
-lib.renameFile=(src,name)=>wait(fs.rename,src,joinPath(url2dirs(src),name))
+lib.renameFile=(src,name)=>wait(fs.rename,src,url2dirs(src).join('/')+'/'+name)
 lib.renameDir=function(src,name)//@todo merge with moveDir
 {
 	let dest=joinPath(url2path(src),name)
