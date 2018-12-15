@@ -57,14 +57,6 @@ tests=
 		}
 	],
 	[
-		curry(file.rename,'tmp/read.txt','copy.txt'),
-		()=>file.read('tmp/copy.txt').then(txt=>txt===readTxt),
-		{
-			name:'renameFile',
-			cleanup:curry(file.rename,'tmp/copy.txt','read.txt')
-		}
-	],
-	[
 
 		curry(file.move,'tmp/read.txt','tmp/a/'),
 		()=>file.readFile('tmp/a/read.txt').then(txt=>txt===readTxt),
@@ -86,29 +78,35 @@ tests=
 			cleanup:()=>file.delete('tmpNew').then(setup),
 			setup:()=>file.writeDir('tmpNew')
 		}
+	],
+	[
+		curry(file.rename,'tmp/read.txt','copy.txt'),
+		()=>file.read('tmp/copy.txt').then(txt=>txt===readTxt),
+		{
+			name:'renameFile',
+			cleanup:curry(file.rename,'tmp/copy.txt','read.txt')
+		}
+	],
+	[
+		curry(file.rename,'tmp','tmpNew'),
+		//@todo add check that tmp does not exist as well?
+		()=>file.isDir('tmpNew').then(bool=>bool===true),
+		{
+			name:'renameDir',
+			cleanup:()=>file.delete('tmpNew').then(setup)
+		}
 	]
 
 	// @todo lib.copyDir (copy tmp into itself)
 	// lib.copyFile
 	// lib.info (on dir and a file)'
 
-	// lib.renameFile
-	// lib.renameDir
-
-	//these are used with move functions...
-	// copy,rename (on both dir & file, or update prev tests to use these methods instead)
+	// copy (on both dir & file, or update prev tests to use these methods instead)
 ],
 opts={now:()=>performance.now(),parallel:false}
 
 setup()
 .then(()=>run(tests,opts))
-//rename
-// .then(function()
-// {
-// 	return file.rename('tmp','tmpNew')
-// 	////.then(()=>file.isDir('tmpNew'))
-// 	//.then(console.log)
-// })
 
 //cleanup
 .then(()=>file.delete('tmp'))
