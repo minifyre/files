@@ -66,7 +66,7 @@ tests=
 	],
 	[
 
-		curry(file.moveFile,'tmp/read.txt','tmp/a/'),
+		curry(file.move,'tmp/read.txt','tmp/a/'),
 		()=>file.readFile('tmp/a/read.txt').then(txt=>txt===readTxt),
 		{
 			name:'moveFile',
@@ -79,7 +79,7 @@ tests=
 		}
 	],
 	[
-		curry(file.moveDir,'tmp','tmpNew'),
+		curry(file.move,'tmp','tmpNew'),
 		()=>file.readFile('tmpNew/tmp/read.txt').then(txt=>txt===readTxt),
 		{
 			name:'moveDir',
@@ -92,12 +92,11 @@ tests=
 	// lib.copyFile
 	// lib.info (on dir and a file)'
 
-	// lib.moveDir
+	// lib.renameFile
 	// lib.renameDir
 
 	//these are used with move functions...
-	// copy,move,rename (on both dir & file, or update prev tests to use these methods instead)
-
+	// copy,rename (on both dir & file, or update prev tests to use these methods instead)
 ],
 opts={now:()=>performance.now(),parallel:false}
 
