@@ -5,6 +5,7 @@ import run from '../../cherub/index.js'
 const
 dirTmp=['read.txt'],
 readTxt='some text',
+setup=()=>file.writeDir('tmp').then(()=>file.writeFile('tmp/read.txt',readTxt)),
 emptyDir=src=>file.readDir(src).then(x=>Array.isArray(x)&&!x.length),
 curry=(fn,...xs)=>(...ys)=>fn(...xs,...ys),
 tests=
@@ -90,11 +91,8 @@ tests=
 
 ],
 opts={now:()=>performance.now(),parallel:false}
-//setup
-Promise.resolve()
-.then(()=>file.writeDir('tmp'))
-.finally(()=>file.writeFile('tmp/read.txt',readTxt))
 
+setup()
 .then(()=>run(tests,opts))
 //rename
 // .then(function()
