@@ -68,9 +68,12 @@ lib.deleteDir=function(src)
 }
 lib.info=async function(src)
 {//@todo +catch()
-	const {atime:accessed,birthtime:created,mtime:modified,ctime:changed,mode,size}=await wait(fs.lstat,src)
+	const
+	stats=await wait(fs.lstat,src),
+	isDir=stats.isDirectory(),
+	{atime:accessed,birthtime:created,mtime:modified,ctime:changed,mode,size}=stats
 
-	return {accessed,changed,created,mode,modified,size,isDir:stats.isDirectory()}
+	return {accessed,changed,created,mode,modified,size,isDir}
 }
 lib.isDir=(...args)=>wait(fs.lstat,...args).then(stats=>stats.isDirectory())
 lib.moveDir=function(src,dest)//@todo merge with copyDir
