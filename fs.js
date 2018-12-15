@@ -84,16 +84,8 @@ lib.moveDir=function(src,dest)//@todo merge with copyDir
 	.then(()=>lib.deleteDir(src))
 }
 lib.moveFile=(src,dest)=>wait(fs.rename,src,joinPath(dest,url2name(src)))
-lib.renameFile=(src,name)=>wait(fs.rename,src,url2dirs(src).join('/')+'/'+name)
-lib.renameDir=function(src,name)//@todo merge with moveDir
-{
-	let dest=joinPath(url2path(src),name)
-
-	return lib.writeDir(dest)
-	.then(()=>lib.readDir(src))
-	.then(arr=>asyncMap(mapPath(arr,src),item=>lib.move(item,dest)))
-	.then(()=>lib.deleteDir(src))
-}
+lib.rename=lib.renameDir=lib.renameFile=
+(src,name)=>wait(fs.rename,src,url2dirs(src).concat(name).join('/'))
 lib.writeDirs=function(src)//@todo need to make sure this works
 {
 	return asyncMap(url2path(src),async function(dir,i,arr)
@@ -109,7 +101,7 @@ lib.writeDirs=function(src)//@todo need to make sure this works
 		return dir
 	})
 }
-;'copy,delete,move,read,rename'
+;'copy,delete,move,read'
 .split(',')
 .forEach(function(fn)
 {
