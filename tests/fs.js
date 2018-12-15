@@ -9,8 +9,8 @@ emptyDir=src=>file.readDir(src).then(x=>Array.isArray(x)&&!x.length),
 curry=(fn,...xs)=>(...ys)=>fn(...xs,...ys),
 tests=
 [
-	[()=>file.readDir('tmp'),dirTmp,'readDir'],
-	[()=>file.readFile('tmp/read.txt'),readTxt,'readFile'],
+	[()=>file.read('tmp'),dirTmp,'readDir'],
+	[()=>file.read('tmp/read.txt'),readTxt,'readFile'],
 	[
 		()=>file.writeDir('tmp/a'),
 		()=>emptyDir('tmp/a/'),
@@ -22,7 +22,7 @@ tests=
 		{name:'writeFile',cleanup:curry(file.delete,'tmp/write.txt')}
 	],
 	[
-		curry(file.deleteDir,'tmp/a/'),
+		curry(file.delete,'tmp/a/'),
 		()=>file.readDir('tmp').then(val=>run.config.assert(val,dirTmp)),
 		{
 			name:'deleteDir',
@@ -30,7 +30,7 @@ tests=
 		}
 	],
 	[
-		curry(file.deleteFile,'tmp/write.txt'),
+		curry(file.delete,'tmp/write.txt'),
 		()=>file.readDir('tmp').then(val=>run.config.assert(val,dirTmp)),
 		{
 			name:'deleteFile',
@@ -64,11 +64,10 @@ tests=
 	// lib.renameFile
 	// lib.renameDir
 
-	// lib.writeDirs tmp/a/b/c/
-	// copy,delete,move,read,rename (on both dir & file, or update prev tests to use these methods instead)
+	//these are used with move functions...
+	// copy,move,rename (on both dir & file, or update prev tests to use these methods instead)
 
 ],
 opts={now:()=>performance.now(),parallel:false}
-
 
 run(tests,opts)
