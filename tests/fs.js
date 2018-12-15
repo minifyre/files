@@ -105,14 +105,19 @@ tests=
 			setup:()=>file.writeDir('tmp/a'),
 			cleanup:()=>file.delete('tmp/a')
 		}
+	],
+	[
+		curry(file.copy,'tmp','tmpNew'),
+		()=>file.readFile('tmpNew/tmp/read.txt').then(txt=>txt===readTxt),
+		{
+			name:'copyDir',
+			setup:()=>file.writeDir('tmpNew'),
+			cleanup:()=>file.delete('tmpNew')
+		}
 	]
-
-	// @todo lib.copyDir (copy tmp into itself)
 	// lib.info (on dir and a file)'
-
-	// copy (on both dir & file, or update prev tests to use these methods instead)
 ],
-opts={now:()=>performance.now(),parallel:false}
+opts={now:()=>performance.now(),parallel:false,shuffle:false}
 
 setup()
 .then(()=>run(tests,opts))
