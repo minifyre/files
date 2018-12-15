@@ -77,6 +77,15 @@ tests=
 				await file.writeFile('tmp/read.txt',readTxt)
 			}
 		}
+	],
+	[
+		curry(file.moveDir,'tmp','tmpNew'),
+		()=>file.readFile('tmpNew/tmp/read.txt').then(txt=>txt===readTxt),
+		{
+			name:'moveDir',
+			cleanup:()=>file.delete('tmpNew').then(setup),
+			setup:()=>file.writeDir('tmpNew')
+		}
 	]
 
 	// @todo lib.copyDir (copy tmp into itself)
