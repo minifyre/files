@@ -62,6 +62,20 @@ tests=
 			name:'renameFile',
 			cleanup:curry(file.rename,'tmp/copy.txt','read.txt')
 		}
+	],
+	[
+
+		curry(file.moveFile,'tmp/read.txt','tmp/a/'),
+		()=>file.readFile('tmp/a/read.txt').then(txt=>txt===readTxt),
+		{
+			name:'moveFile',
+			setup:()=>file.writeDir('tmp/a/'),
+			cleanup:async function()
+			{
+				await file.delete('tmp/a')
+				await file.writeFile('tmp/read.txt',readTxt)
+			}
+		}
 	]
 
 	// @todo lib.copyDir (copy tmp into itself)
@@ -69,7 +83,6 @@ tests=
 	// lib.info (on dir and a file)'
 
 	// lib.moveDir
-	// lib.moveFile
 	// lib.renameDir
 
 	//these are used with move functions...
