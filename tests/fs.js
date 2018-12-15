@@ -114,10 +114,20 @@ tests=
 			setup:()=>file.writeDir('tmpNew'),
 			cleanup:()=>file.delete('tmpNew')
 		}
+	],
+	//@todo add checks to see that numbers time props are normalized to integers
+	[
+		curry(file.info,'tmp'),
+		({isDir})=>isDir===true,
+		'infoDir'
+	],
+	[
+		curry(file.info,'tmp/read.txt'),
+		({isDir})=>isDir===false,
+		'infoDir'
 	]
-	// lib.info (on dir and a file)'
 ],
-opts={now:()=>performance.now(),parallel:false,shuffle:false}
+opts={now:()=>performance.now(),parallel:false}
 
 setup()
 .then(()=>run(tests,opts))
