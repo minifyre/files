@@ -71,7 +71,10 @@ lib.info=async function(src)
 	const
 	stats=await wait(fs.lstat,src),
 	isDir=stats.isDirectory(),
-	{atime:accessed,birthtime:created,mtime:modified,ctime:changed,mode,size}=stats
+	{atime,birthtime,mtime,ctime,mode,size}=stats,
+	[accessed,changed,created,modified]=
+		[atime,ctime,birthtime,mtime]
+		.map(date=>date.valueOf())
 
 	return {accessed,changed,created,mode,modified,size,isDir}
 }
