@@ -3,8 +3,8 @@ import fs from 'fs'
 const
 curry=(fn,...xs)=>(...ys)=>fn(...xs,...ys),
 joinPath=(path,filename)=>path+(!path.match(/\/$/)?'/':'')+filename,
-url2dirs=url=>url.split(/\/|\\/).filter(txt=>!!txt.length),
-url2name=url=>url2dirs(url).slice(-1)[0],
+url2path=url=>url.split(/\/|\\/).filter(txt=>!!txt.length),
+url2name=url=>url2path(url).slice(-1)[0],
 wait=function(fn,...args)
 {
 	return new Promise((res,rej)=>fn(...args,(err,rtn)=>err?rej(err):res(rtn)))
@@ -87,7 +87,7 @@ lib.moveFile=(src,dest)=>wait(fs.rename,src,joinPath(dest,url2name(src)))
 lib.renameFile=(src,name)=>wait(fs.rename,src,joinPath(url2dirs(src),name))
 lib.renameDir=function(src,name)//@todo merge with moveDir
 {
-	let dest=joinPath(url2dirs(src),name)
+	let dest=joinPath(url2path(src),name)
 
 	return lib.writeDir(dest)
 	.then(()=>lib.readDir(src))
@@ -96,7 +96,7 @@ lib.renameDir=function(src,name)//@todo merge with moveDir
 }
 lib.writeDirs=function(src)//@todo need to make sure this works
 {
-	return asyncMap(url2dirs(src),async function(dir,i,arr)
+	return asyncMap(url2path(src),async function(dir,i,arr)
 	{
 		const
 		prefix=arr.slice(0,i),
