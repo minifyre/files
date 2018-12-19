@@ -89,6 +89,7 @@ lib.moveDir=function(src,dest)//@todo merge with copyDir
 	.then(()=>lib.deleteDir(src))
 }
 lib.moveFile=(src,dest)=>wait(fs.rename,src,joinPath(dest,url2name(src)))
+lib.path=url=>wait(fs.realpath,url)
 lib.rename=lib.renameDir=lib.renameFile=
 (src,name)=>wait(fs.rename,src,url2dirs(src).concat(name).join('/'))
 lib.writeDirs=function(src)//@todo need to make sure this works

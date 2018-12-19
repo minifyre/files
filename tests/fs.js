@@ -1,6 +1,7 @@
 import file from '../fs.js'
 import {performance} from 'perf_hooks'
 import run from '../../cherub/index.js'
+import lib from '../fs.js';
 
 const
 dirTmp=['read.txt'],
@@ -130,6 +131,11 @@ tests=
 		curry(file.info,readPath),
 		({isDir})=>isDir===false,
 		'infoDir'
+	],
+	[
+		()=>file.path('./'),
+		txt=>txt.match(/^[\w\d]+:\\[^\s]+$/),
+		'path'
 	]
 ],
 opts={now:()=>performance.now(),parallel:false}
