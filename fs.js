@@ -34,6 +34,8 @@ lib=Object.entries(
 
 export default lib
 
+lib.util={joinPath,url2path,url2dirs,url2name}
+
 lib.readFile=(src,encoding='utf8',...args)=>wait(fs.readFile,src,encoding,...args)
 
 lib.copyDir=function(src,dest)
