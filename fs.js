@@ -6,6 +6,7 @@ joinPath=(path,filename)=>path+(!path.match(/\/$/)?'/':'')+filename,
 url2path=url=>url.split(/\/|\\/).filter(txt=>!!txt.length),
 url2dirs=url=>url2path(url).slice(0,-1),
 url2name=url=>url2path(url).slice(-1)[0],
+url2volume=url=>url.split(':')[0],
 wait=function(fn,...args)
 {
 	return new Promise((res,rej)=>fn(...args,(err,rtn)=>err?rej(err):res(rtn)))
@@ -34,7 +35,7 @@ lib=Object.entries(
 
 export default lib
 
-lib.util={joinPath,url2path,url2dirs,url2name}
+lib.util={joinPath,url2path,url2dirs,url2name,url2volume}
 
 lib.readFile=(src,encoding='utf8',...args)=>wait(fs.readFile,src,encoding,...args)
 
