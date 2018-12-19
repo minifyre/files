@@ -9,5 +9,8 @@
 	},
 	"devDependencies": {
 		"cherub": "minifyre/cherub"
+	},
+	"scripts": {
+		"test": "node -r esm tests/fs.js"
 	}
 }
